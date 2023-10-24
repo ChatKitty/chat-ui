@@ -261,10 +261,7 @@ interface EventMessage {
     payload: any;
 }
 
-declare type Environment = 'production' | 'staging' | 'development' | {
-    host: string;
-    isSecure: boolean;
-};
+declare type Environment = 'production' | any;
 declare type Theme = 'light' | 'dark';
 declare type AuthStrategy = {
     type: string;
@@ -299,6 +296,24 @@ interface MenuAction {
     name: string;
     channel: Channel;
 }
+interface LocalizationContext {
+    locale: string;
+}
+declare type LocalizationStrings = {
+    'chat:channels_empty'?: string;
+    'chat:channel_empty'?: string;
+    'chat:new_messages'?: string;
+    'chat:message_deleted'?: string;
+    'chat:messages_empty'?: string;
+    'chat:chat_started'?: string;
+    'chat:type_message'?: string;
+    'chat:search'?: string;
+    'chat:is_online'?: string;
+    'chat:last_seen'?: string;
+    'chat:is_typing'?: string;
+    'chat:cancel_select_message'?: string;
+};
+declare type Localization = (context: LocalizationContext) => LocalizationStrings;
 interface ChatComponentContext {
     locale: string;
     dispatch: (message: EventMessage) => void;
@@ -324,6 +339,7 @@ interface ChatUi {
     authStrategy?: AuthStrategy;
     profile?: UserProfile;
     route?: Route;
+    localization?: Localization;
     chatComponent?: ChatComponent;
     onNotificationReceived?: (notification: Notification) => void;
 }
