@@ -1,6 +1,6 @@
 {
   "name": "@chatkitty/ui",
-  "version": "1.1.1",
+  "version": "1.1.6",
   "files": [
     "dist"
   ],
@@ -18,5 +18,8 @@
         "default": "./dist/index.mjs"
       }
     }
+  },
+  "dependencies": {
+    "lit-html": "^2.7.0 || ^3.0.0"
   }
 }
