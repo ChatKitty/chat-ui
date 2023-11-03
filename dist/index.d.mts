@@ -261,24 +261,24 @@ interface EventMessage {
     payload: any;
 }
 
-declare type Environment = 'production' | any;
+declare type Environment = any;
 declare type Theme = 'light' | 'dark';
-declare type AuthStrategy = {
+declare type Authentication = {
     type: string;
-} & (UnsecuredAuthStrategy | ParamsAuthStrategy);
-interface UnsecuredAuthStrategy {
+} & (UnsecuredAuthentication | AuthParamsAuthentication);
+interface UnsecuredAuthentication {
     type: 'unsecured';
 }
-interface ParamsAuthStrategy {
+interface AuthParamsAuthentication {
     type: 'auth-params';
     params: any;
 }
 declare type Route = {
     name: string;
-} & (DMRoute | ChannelRoute);
-interface DMRoute {
+} & (DirectMessagesRoute | ChannelRoute);
+interface DirectMessagesRoute {
     name: 'direct-messages';
-    chatUsers: string[];
+    users: string[];
 }
 interface ChannelRoute {
     name: 'channel';
@@ -332,16 +332,16 @@ interface ChatUiContainer {
 interface ChatUi {
     widgetId: string;
     username: string;
-    environment?: Environment;
     locale?: string;
     container?: ChatUiContainer;
     theme?: Theme;
-    authStrategy?: AuthStrategy;
+    authentication?: Authentication;
     profile?: UserProfile;
     route?: Route;
     localization?: Localization;
     chatComponent?: ChatComponent;
     onNotificationReceived?: (notification: Notification) => void;
+    $environment?: Environment;
 }
 
 declare const loadChatUi: (ui: ChatUi) => void;

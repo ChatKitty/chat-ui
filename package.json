@@ -1,6 +1,8 @@
 {
   "name": "@chatkitty/ui",
-  "version": "1.1.11",
+  "version": "1.2.2",
+  "description": "Chat UI by ChatKitty. ChatKitty is the first complete chat platform for your mobile and web apps. ChatKitty provides chat features that are easy to add to your new or existing app without having to build UI or a backend.",
+  "license": "MIT",
   "files": [
     "dist"
   ],
