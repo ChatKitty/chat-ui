@@ -256,11 +256,6 @@ declare class UserMentionedChannelNotificationData extends NotificationData {
     message: Message;
 }
 
-interface EventMessage {
-    type: string;
-    payload: any;
-}
-
 declare type Environment = any;
 declare type Theme = 'light' | 'dark';
 declare type Authentication = {
@@ -275,6 +270,7 @@ interface AuthParamsAuthentication {
 }
 declare type Route = {
     name: string;
+    allowNavigation?: boolean;
 } & (DirectMessagesRoute | ChannelRoute);
 interface DirectMessagesRoute {
     name: 'direct-messages';
@@ -316,7 +312,6 @@ declare type LocalizationStrings = {
 declare type Localization = (context: LocalizationContext) => LocalizationStrings;
 interface ChatComponentContext {
     locale: string;
-    dispatch: (message: EventMessage) => void;
 }
 declare type ChatComponent = (context: ChatComponentContext) => {
     menuActions?: MenuActionType[];
