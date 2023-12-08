@@ -308,22 +308,41 @@ declare type LocalizationStrings = {
     'chat:last_seen'?: string;
     'chat:is_typing'?: string;
     'chat:cancel_select_message'?: string;
+    'chat:menu_action:mark_as_read'?: string;
+    'chat:message_selection_action:copy'?: string;
 };
 declare type Localization = (context: LocalizationContext) => LocalizationStrings;
+declare type AudioSound = {
+    src?: string;
+    muted?: boolean;
+};
+interface Audio {
+    enabled?: boolean;
+    sounds?: {
+        'chat:message_sent'?: AudioSound;
+        'chat:message_received'?: AudioSound;
+    };
+}
 interface ChatComponentContext {
     locale: string;
 }
 declare type ChatComponent = (context: ChatComponentContext) => {
     menuActions?: MenuActionType[];
     onMounted?: () => void;
-    channelDetailsHandler?: (channel: Channel) => void;
-    menuActionHandler?: (action: MenuAction) => void;
+    onHeaderSelected?: (channel: Channel) => void;
+    onMenuActionSelected?: (action: MenuAction) => void;
 };
 interface ChatUiContainer {
     id?: string;
     height?: string;
     width?: string;
 }
+interface Template {
+}
+interface ErrorTemplateContext {
+    message: string;
+}
+declare type ErrorTemplate = (options: ErrorTemplateContext) => Template;
 interface ChatUi {
     widgetId: string;
     username: string;
@@ -334,11 +353,14 @@ interface ChatUi {
     profile?: UserProfile;
     route?: Route;
     localization?: Localization;
+    audio?: Audio;
     chatComponent?: ChatComponent;
     onNotificationReceived?: (notification: Notification) => void;
+    errorTemplate?: ErrorTemplate;
     $environment?: Environment;
 }
 
+declare const template: (template: string) => Template;
 declare const loadChatUi: (ui: ChatUi) => void;
 
-export { loadChatUi };
+export { loadChatUi, template };
