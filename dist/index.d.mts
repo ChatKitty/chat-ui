@@ -209,53 +209,6 @@ declare class ChannelStreams {
     messages: string;
 }
 
-declare type Notification = SystemSentMessageNotification | UserSentMessageNotification | UserRepliedToMessageNotification | UserMentionedNotification | UserMentionedChannelNotification;
-interface BaseNotification {
-    id: number;
-    title: string;
-    body: string;
-    channel: Channel | null;
-    data: unknown;
-    muted: boolean;
-    createdTime: string;
-    readTime: string | null;
-}
-declare type SystemSentMessageNotification = BaseNotification & {
-    data: SystemSentMessageNotificationData;
-};
-declare type UserSentMessageNotification = BaseNotification & {
-    data: UserSentMessageNotificationData;
-};
-declare type UserRepliedToMessageNotification = BaseNotification & {
-    data: UserRepliedToMessageNotificationData;
-};
-declare type UserMentionedNotification = BaseNotification & {
-    data: UserMentionedNotificationData;
-};
-declare type UserMentionedChannelNotification = BaseNotification & {
-    data: UserMentionedChannelNotificationData;
-};
-declare abstract class NotificationData {
-    type: string;
-    recipient: User;
-}
-declare class SystemSentMessageNotificationData extends NotificationData {
-    message: Message;
-}
-declare class UserSentMessageNotificationData extends NotificationData {
-    message: Message;
-}
-declare class UserRepliedToMessageNotificationData extends NotificationData {
-    message: Message;
-    parent: Message;
-}
-declare class UserMentionedNotificationData extends NotificationData {
-    message: Message;
-}
-declare class UserMentionedChannelNotificationData extends NotificationData {
-    message: Message;
-}
-
 declare type Environment = any;
 declare type Theme = 'light' | 'dark';
 declare type Authentication = {
@@ -323,6 +276,13 @@ interface Audio {
         'chat:message_received'?: AudioSound;
     };
 }
+interface ChatUiContainer {
+    id?: string;
+    height?: string;
+    width?: string;
+}
+interface Template {
+}
 interface ChatComponentContext {
     locale: string;
 }
@@ -332,17 +292,16 @@ declare type ChatComponent = (context: ChatComponentContext) => {
     onHeaderSelected?: (channel: Channel) => void;
     onMenuActionSelected?: (action: MenuAction) => void;
 };
-interface ChatUiContainer {
-    id?: string;
-    height?: string;
-    width?: string;
-}
-interface Template {
-}
+declare type Components = {
+    chat: ChatComponent;
+};
 interface ErrorTemplateContext {
     message: string;
 }
 declare type ErrorTemplate = (options: ErrorTemplateContext) => Template;
+declare type Templates = {
+    error: ErrorTemplate;
+};
 interface ChatUi {
     widgetId: string;
     username: string;
@@ -354,9 +313,8 @@ interface ChatUi {
     route?: Route;
     localization?: Localization;
     audio?: Audio;
-    chatComponent?: ChatComponent;
-    onNotificationReceived?: (notification: Notification) => void;
-    errorTemplate?: ErrorTemplate;
+    components?: Components;
+    templates?: Templates;
     $environment?: Environment;
 }
 interface LoadChatUiOptions {
