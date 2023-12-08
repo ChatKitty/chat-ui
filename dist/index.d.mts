@@ -359,8 +359,11 @@ interface ChatUi {
     errorTemplate?: ErrorTemplate;
     $environment?: Environment;
 }
+interface LoadChatUiOptions {
+    timeout?: number;
+}
 
 declare const template: (template: string) => Template;
-declare const loadChatUi: (ui: ChatUi) => void;
+declare const loadChatUi: (ui: ChatUi, options?: LoadChatUiOptions) => void;
 
 export { loadChatUi, template };
