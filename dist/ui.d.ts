@@ -209,7 +209,8 @@ declare class ChannelStreams {
     messages: string;
 }
 
-declare type Environment = any;
+interface Environment {
+}
 declare type Theme = 'light' | 'dark';
 declare type Authentication = {
     type: string;
@@ -304,7 +305,7 @@ declare type Templates = {
 };
 interface ChatUi {
     widgetId: string;
-    username: string;
+    username?: string;
     locale?: string;
     container?: ChatUiContainer;
     theme?: Theme;
@@ -315,10 +316,14 @@ interface ChatUi {
     audio?: Audio;
     components?: Components;
     templates?: Templates;
-    $environment?: Environment;
+}
+interface ApiConnection {
+    username: string;
 }
 interface LoadChatUiOptions {
     timeout?: number;
+    connection?: ApiConnection;
+    $environment?: Environment;
 }
 
 declare const template: (template: string) => Template;

@@ -1,22 +1,22 @@
 {
   "name": "@chatkitty/ui",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Chat UI by ChatKitty. ChatKitty is the first complete chat platform for your mobile and web apps. ChatKitty provides chat features that are easy to add to your new or existing app without having to build UI or a backend.",
   "license": "MIT",
   "files": [
     "dist"
   ],
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/ui.js",
+  "module": "./dist/ui.mjs",
+  "types": "./dist/ui.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/ui.mjs",
+      "require": "./dist/ui.js",
+      "types": "./dist/ui.d.ts"
     },
-    "./esm": "./dist/index.mjs",
-    "./cjs": "./dist/index.js",
+    "./esm": "./dist/ui.mjs",
+    "./cjs": "./dist/ui.js",
     "./package.json": "./package.json"
   },
   "dependencies": {
