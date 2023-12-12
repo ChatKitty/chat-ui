@@ -48,6 +48,7 @@ interface BaseMessage {
     id: number;
     type: string;
     channelId: number;
+    nestedLevel?: number;
     createdTime: string;
     groupTag?: string;
     reactions?: ReactionSummary[];
@@ -209,46 +210,157 @@ declare class ChannelStreams {
     messages: string;
 }
 
-interface Environment {
+declare type CurrentUser = BaseUser & {
+    /** @internal */
+    _relays: CurrentUserRelays;
+    /** @internal */
+    _topics: CurrentUserTopics;
+    /** @internal */
+    _actions: CurrentUserActions;
+    /** @internal */
+    _streams: CurrentUserStreams;
+};
+declare class CurrentUserRelays {
+    self: string;
+    readFileAccessGrant: string;
+    writeFileAccessGrant: string;
+    channelsCount: string;
+    channels: string;
+    messages: string;
+    joinableChannels: string;
+    unreadChannelsCount: string;
+    unreadChannels: string;
+    unreadMessagesCount: string;
+    contactsCount: string;
+    contacts: string;
+    userBlockedRecords: string;
+}
+declare class CurrentUserTopics {
+    self: string;
+    channels: string;
+    messages: string;
+    readReceipts: string;
+    notifications: string;
+    contacts: string;
+    participants: string;
+    users: string;
+    reactions: string;
+    threads: string;
+    calls: string;
+}
+declare class CurrentUserActions {
+    update: string;
+    createChannel: string;
+    updateDisplayPicture: string;
+}
+declare class CurrentUserStreams {
+    displayPicture: string;
+}
+
+declare type Notification = SystemSentMessageNotification | UserSentMessageNotification | UserRepliedToMessageNotification | UserMentionedNotification | UserMentionedChannelNotification;
+interface BaseNotification {
+    id: number;
+    title: string;
+    body: string;
+    channel: Channel | null;
+    data: unknown;
+    muted: boolean;
+    createdTime: string;
+    readTime: string | null;
+}
+declare type SystemSentMessageNotification = BaseNotification & {
+    data: SystemSentMessageNotificationData;
+};
+declare type UserSentMessageNotification = BaseNotification & {
+    data: UserSentMessageNotificationData;
+};
+declare type UserRepliedToMessageNotification = BaseNotification & {
+    data: UserRepliedToMessageNotificationData;
+};
+declare type UserMentionedNotification = BaseNotification & {
+    data: UserMentionedNotificationData;
+};
+declare type UserMentionedChannelNotification = BaseNotification & {
+    data: UserMentionedChannelNotificationData;
+};
+declare abstract class NotificationData {
+    type: string;
+    recipient: User;
+}
+declare class SystemSentMessageNotificationData extends NotificationData {
+    message: Message;
+}
+declare class UserSentMessageNotificationData extends NotificationData {
+    message: Message;
+}
+declare class UserRepliedToMessageNotificationData extends NotificationData {
+    message: Message;
+    parent: Message;
+}
+declare class UserMentionedNotificationData extends NotificationData {
+    message: Message;
+}
+declare class UserMentionedChannelNotificationData extends NotificationData {
+    message: Message;
+}
+
+interface Observer<T> {
+    next: (value: T) => void;
+    error: (error: any) => void;
+    complete: () => void;
+}
+interface Subscription {
+    unsubscribe: () => void;
+}
+interface Reactive<T> {
+    value?: T;
+    observe: (observer?: Partial<Observer<T>> | ((value: T) => void)) => Subscription;
+}
+
+declare type Environment = any;
+interface ApiConnection {
+    user: Reactive<CurrentUser>;
+    notifications: Reactive<Notification>;
+    unreadChannelsCount: Reactive<number>;
 }
 declare type Theme = 'light' | 'dark';
 declare type Authentication = {
     type: string;
 } & (UnsecuredAuthentication | AuthParamsAuthentication);
-interface UnsecuredAuthentication {
+declare type UnsecuredAuthentication = {
     type: 'unsecured';
-}
-interface AuthParamsAuthentication {
+};
+declare type AuthParamsAuthentication = {
     type: 'auth-params';
     params: any;
-}
+};
 declare type Route = {
     name: string;
     allowNavigation?: boolean;
 } & (DirectMessagesRoute | ChannelRoute);
-interface DirectMessagesRoute {
+declare type DirectMessagesRoute = {
     name: 'direct-messages';
     users: string[];
-}
-interface ChannelRoute {
+};
+declare type ChannelRoute = {
     name: 'channel';
     channel: string;
-}
-interface UserProfile {
+};
+declare type UserProfile = {
     displayName: string;
     displayPicture?: string;
-}
-interface MenuActionType {
+};
+declare type MenuActionType = {
     name: string;
     title: string;
-}
-interface MenuAction {
+};
+declare type MenuAction = {
     name: string;
     channel: Channel;
-}
-interface LocalizationContext {
+};
+declare type LocalizationContext = {
     locale: string;
-}
+};
 declare type LocalizationStrings = {
     'chat:channels_empty'?: string;
     'chat:channel_empty'?: string;
@@ -270,23 +382,21 @@ declare type AudioSound = {
     src?: string;
     muted?: boolean;
 };
-interface Audio {
+declare type Audio = {
     enabled?: boolean;
     sounds?: {
         'chat:message_sent'?: AudioSound;
         'chat:message_received'?: AudioSound;
     };
-}
-interface ChatUiContainer {
+};
+declare type ChatUiContainer = {
     id?: string;
     height?: string;
     width?: string;
-}
-interface Template {
-}
-interface ChatComponentContext {
+};
+declare type ChatComponentContext = {
     locale: string;
-}
+};
 declare type ChatComponent = (context: ChatComponentContext) => {
     menuActions?: MenuActionType[];
     onMounted?: () => void;
@@ -296,14 +406,16 @@ declare type ChatComponent = (context: ChatComponentContext) => {
 declare type Components = {
     chat: ChatComponent;
 };
-interface ErrorTemplateContext {
+declare type ErrorTemplateContext = {
     message: string;
+};
+interface Template {
 }
 declare type ErrorTemplate = (options: ErrorTemplateContext) => Template;
 declare type Templates = {
     error: ErrorTemplate;
 };
-interface ChatUi {
+declare type ChatUi = {
     widgetId: string;
     username?: string;
     locale?: string;
@@ -316,15 +428,16 @@ interface ChatUi {
     audio?: Audio;
     components?: Components;
     templates?: Templates;
-}
-interface ApiConnection {
-    username: string;
-}
-interface LoadChatUiOptions {
-    timeout?: number;
+};
+declare type LoadChatUiOptions = {
+    /**
+     * Experimental Feature: Shared API Connection
+     * WARNING: This feature is still under development, maybe not be stable and may change in future releases.
+     */
     connection?: ApiConnection;
+    timeout?: number;
     $environment?: Environment;
-}
+};
 
 declare const template: (template: string) => Template;
 declare const loadChatUi: (ui: ChatUi, options?: LoadChatUiOptions) => void;
